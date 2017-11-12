@@ -61,18 +61,14 @@ $i = 0;
 
 function task_num($array, $category_name) {
     $task_num = 0;
-    $count = count($array);
-
-    if ($category_name == "Все") {
-        return $count;
-    }
-
-    for ($i = 0; $i < count($array); $i++) {        
-        if ($category_name == $array[$i]['category']) {
+    foreach ($array as $task) {
+        if ($category_name == "Все") {
+            $task_num++;
+        } elseif ($category_name == $task['category']) {
             $task_num++;
         }
     }
-    
+
     return $task_num;
 }
 
