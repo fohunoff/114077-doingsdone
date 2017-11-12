@@ -59,19 +59,16 @@ $tasks_array = [
 $tasks_count = count($tasks_array);
 $i = 0;
 
-function task_num ($array, $category_name) {
-    $i = 0;
-    $count = count($array);
+function task_num($array, $category_name) {
     $task_num = 0;
-    while ($i < $count) {
+    for ($i =0; $i < count($array); $i++) {        
         if ($category_name == "Все") {
-            $task_num = $count;
+            $task_num = count($array);
         } elseif ($category_name == $array[$i]['category']) {
             $task_num++;
         }
-        $i++;
     }
-    print($task_num);
+    return $task_num;
 }
 
 ?>
@@ -122,7 +119,7 @@ function task_num ($array, $category_name) {
                     <?php foreach($categories_array as $key => $value) : ?>
                             <li class="main-navigation__list-item <?php if ($key == 0) : ?>main-navigation__list-item--active<? endif; ?>">
                             <a class="main-navigation__list-item-link" href="#"><?= $value; ?></a>
-                            <span class="main-navigation__list-item-count"><?php task_num($tasks_array, $value); ?></span>
+                            <span class="main-navigation__list-item-count"><?php print(task_num($tasks_array, $value)); ?></span>
                         </li>
                     <?php endforeach; ?>
                     </ul>
