@@ -53,11 +53,27 @@ $tasks_array = [
         'date_deadline' => NULL,
         'category' => $categories_array[4],
         'done' => false
-    ]
+    ],
 ];
+
 $tasks_count = count($tasks_array);
 $i = 0;
+
+function task_num($array, $category_name) {
+    $task_num = 0;
+    foreach ($array as $task) {
+        if ($category_name == "Все") {
+            $task_num++;
+        } elseif ($category_name == $task['category']) {
+            $task_num++;
+        }
+    }
+
+    return $task_num;
+}
+
 ?>
+
 <!DOCTYPE html>
 <html lang="ru">
 
@@ -104,7 +120,7 @@ $i = 0;
                     <?php foreach($categories_array as $key => $value) : ?>
                             <li class="main-navigation__list-item <?php if ($key == 0) : ?>main-navigation__list-item--active<? endif; ?>">
                             <a class="main-navigation__list-item-link" href="#"><?= $value; ?></a>
-                            <span class="main-navigation__list-item-count">24</span>
+                            <span class="main-navigation__list-item-count"><?php print(task_num($tasks_array, $value)); ?></span>
                         </li>
                     <?php endforeach; ?>
                     </ul>
