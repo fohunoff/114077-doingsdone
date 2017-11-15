@@ -1,18 +1,24 @@
 <?php
 
 function include_template($path, $options_array) {
-    if(!isset($path)) {
-        return $template_view;
-    } else {
+    $template_view = '';
+    if(file_exists($path)) {
+        /*
+        foreach($options_array as $key => $value) {
+            $value = $options_array[$key];
+        }
+        */
         $title = $options_array['title'];
         $user_name = $options_array['user_name'];
-        $categories_array = $options_array['categories'];
+        $categories_array = $options_array['categories_array'];
         $tasks_array = $options_array['tasks_array'];
         $content = $options_array['content'];
-    
+        
         require_once($path);
         $template_view = ob_get_clean();
         
+        return $template_view;
+    } else {
         return $template_view;
     }
 }

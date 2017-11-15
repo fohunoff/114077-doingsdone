@@ -27,9 +27,9 @@ ob_start();
 $page_content = include_template('templates/index.php', ['tasks_array' => $tasks_array]);
 $layout_content = include_template('templates/layout.php',
     [
-        'title' => htmlspecialchars($title),
-        'user_name' => htmlspecialchars($user_name),
-        'categories' => $categories_array,
+        'title' => $title,
+        'user_name' => $user_name,
+        'categories_array' => $categories_array,
         'content' => $page_content,
         'tasks_array' => $tasks_array
     ]);
