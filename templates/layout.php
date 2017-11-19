@@ -54,7 +54,7 @@
             </section>
 
             <main class="content__main">
-                <?php print($content); ?>
+                <?php print($page_content); ?>
             </main>
         </div>
     </div>

@@ -2,25 +2,13 @@
 
 function include_template($path, $options_array) {
     $template_view = '';
-    if(file_exists($path)) {
-        /*
-        foreach($options_array as $key => $value) {
-            $value = $options_array[$key];
-        }
-        */
-        $title = $options_array['title'];
-        $user_name = $options_array['user_name'];
-        $categories_array = $options_array['categories_array'];
-        $tasks_array = $options_array['tasks_array'];
-        $content = $options_array['content'];
-        
+    if (file_exists($path)) {
+        extract($options_array);
+        ob_start();
         require_once($path);
         $template_view = ob_get_clean();
-        
-        return $template_view;
-    } else {
-        return $template_view;
     }
+    return $template_view;
 }
 
 function task_num($array, $category_name) {

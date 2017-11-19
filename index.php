@@ -1,7 +1,7 @@
 <?php
 
-require_once 'functions.php';
 require_once 'data.php';
+require_once 'functions.php';
 
 // показывать или нет выполненные задачи
 $show_complete_tasks = rand(0, 1);
@@ -23,17 +23,18 @@ $days_until_deadline =  floor(($task_deadline_ts - $current_ts)/86400);
 $title = "Дела в порядке";
 $user_name = "Иван";
 
-ob_start();
-$page_content = include_template('templates/index.php', ['tasks_array' => $tasks_array]);
+$page_content = include_template('templates/index.php', [
+    'tasks_array' => $tasks_array
+    ]);
 $layout_content = include_template('templates/layout.php',
     [
         'title' => $title,
         'user_name' => $user_name,
         'categories_array' => $categories_array,
-        'content' => $page_content,
+        'page_content' => $page_content,
         'tasks_array' => $tasks_array
     ]);
-ob_end_flush();
-print($template_view);
+
+print($layout_content);
 
 ?>

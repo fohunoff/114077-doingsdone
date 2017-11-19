@@ -28,12 +28,12 @@
 </div>
 
 <table class="tasks">
-    <?php for($i = 0; $i < count($tasks_array); $i++) : ?>
-    <tr class="tasks__item task <?php if($tasks_array[$i]['done'] == 1) : ?>task--completed<? endif; ?>">
+    <?php foreach($tasks_array as $task) : ?>
+    <tr class="tasks__item task <?php if($task['done'] == 1) : ?>task--completed<? endif; ?>">
         <td class="task__select">
             <label class="checkbox task__checkbox">
                 <input class="checkbox__input visually-hidden" type="checkbox">
-                <a href="/"><span class="checkbox__text"><?= htmlspecialchars($tasks_array[$i]['name']); ?></span></a>
+                <a href="/"><span class="checkbox__text"><?= htmlspecialchars($task['name']); ?></span></a>
             </label>
         </td>
 
@@ -41,8 +41,8 @@
         </td>
 
         <td class="task__date">
-        <?= $tasks_array[$i]['date_deadline']; ?>
+        <?= $task['date_deadline']; ?>
         </td>
     </tr>
-    <? endfor; ?>
+    <? endforeach; ?>
 </table>
