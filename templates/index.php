@@ -1,3 +1,16 @@
+<?php
+
+// Используемые переменные:
+// 
+// $tasks_array             список всех задач
+// 
+// $show_complete_tasks     Показывать или нет выполненные задачи
+//
+
+
+
+?>
+
 <h2 class="content__main-heading">Список задач</h2>
 
 <form class="search-form" action="index.html" method="post">
@@ -17,11 +30,7 @@
     <label class="checkbox">
         <a href="/">
             <!--добавить сюда аттрибут "checked", если переменная $show_complete_tasks равна единице-->
-            <?php if ($show_complete_tasks == 1) : ?>
-                <input class="checkbox__input visually-hidden" type="checkbox" checked>
-            <?php else : ?>
-                <input class="checkbox__input visually-hidden" type="checkbox">
-            <?php endif; ?>
+            <input class="checkbox__input visually-hidden" type="checkbox" <?php if ($show_complete_tasks == 1) : ?>checked<?php endif; ?>>
             <span class="checkbox__text">Показывать выполненные</span>
         </a>
     </label>
@@ -29,7 +38,12 @@
 
 <table class="tasks">
     <?php foreach($tasks_array as $task) : ?>
-    <tr class="tasks__item task <?php if($task['done'] == 1) : ?>task--completed<? endif; ?>">
+    <?php if($show_complete_tasks == 1 || $task['done'] == 0) : ?>
+    <tr class="tasks__item task
+                                <?php if($task['done'] == 1) : ?>task--completed<? endif; ?>
+                                
+                                ">
+        
         <td class="task__select">
             <label class="checkbox task__checkbox">
                 <input class="checkbox__input visually-hidden" type="checkbox">
@@ -38,11 +52,16 @@
         </td>
 
         <td class="task__file">
+            <?php if ($task['file_path'] != 0 ) : ?>
+            <a class="download-link" href="<?='/' . htmlspecialchars($task['file_name']);?>"><?=$task['file_name'];?></a>
+            <? endif ?>
         </td>
 
         <td class="task__date">
-        <?= $task['date_deadline']; ?>
+            <?= htmlspecialchars($task['date_deadline']); ?>
         </td>
+
     </tr>
+    <?php endif; ?>
     <? endforeach; ?>
 </table>

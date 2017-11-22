@@ -1,3 +1,20 @@
+<?php
+
+// Используемые переменные:
+// 
+// $title                   Заголовок страницы
+// $body_class              Класс с затемнением для вывода формы
+// $user_name               Имя пользователя
+// $categories_array        Список категорий
+// $tasks_array             Список задач
+//
+// $page_content            Содержимое шабона вывода списка задач
+// $form_addtask            Содержимое шаблона формы добавления задачи
+// 
+// $show_complete_tasks     Показывать или нет выполненные задачи
+//
+
+?>
 <!DOCTYPE html>
 <html lang="ru">
 
@@ -8,7 +25,7 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 
-<body><!--class="overlay"-->
+<body <?=$body_class?>>
 <h1 class="visually-hidden">Дела в порядке</h1>
 
 <div class="page-wrapper">
@@ -19,7 +36,7 @@
             </a>
 
             <div class="main-header__side">
-                <a class="main-header__side-item button button--plus" href="#">Добавить задачу</a>
+                <a class="main-header__side-item button button--plus" href="<?php print('?add=task'); ?>">Добавить задачу</a>
 
                 <div class="main-header__side-item user-menu">
                     <div class="user-menu__image">
@@ -44,7 +61,7 @@
                     <?php foreach($categories_array as $id => $category_name) : ?>
                             <li class="main-navigation__list-item <?php if ($id == $_GET['id']) : ?>main-navigation__list-item--active<? endif; ?>">
                             <a class="main-navigation__list-item-link" href="<?php print("?id=" . $id); ?>"><?= htmlspecialchars($category_name); ?></a>
-                            <span class="main-navigation__list-item-count"><?php print(task_num($tasks_array, $category_name)); ?></span>
+                            <span class="main-navigation__list-item-count"><?php print(task_num($tasks_array, $id)); ?></span>
                         </li>
                     <?php endforeach; ?>
                     </ul>
@@ -68,7 +85,7 @@
             <p>Веб-приложение для удобного ведения списка дел.</p>
         </div>
 
-        <a class="main-footer__button button button--plus">Добавить задачу</a>
+        <a class="main-footer__button button button--plus" href="<?php print('?add=task'); ?>">Добавить задачу</a>
 
         <div class="main-footer__social social">
             <span class="visually-hidden">Мы в соцсетях:</span>
@@ -99,49 +116,7 @@
     </div>
 </footer>
 
-<div class="modal" hidden>
-    <button class="modal__close" type="button" name="button">Закрыть</button>
-
-    <h2 class="modal__heading">Добавление задачи</h2>
-
-    <form class="form"  action="index.html" method="post">
-        <div class="form__row">
-            <label class="form__label" for="name">Название <sup>*</sup></label>
-
-            <input class="form__input" type="text" name="name" id="name" value="" placeholder="Введите название">
-        </div>
-
-        <div class="form__row">
-            <label class="form__label" for="project">Проект <sup>*</sup></label>
-
-            <select class="form__input form__input--select" name="project" id="project">
-                <option value="">Входящие</option>
-            </select>
-        </div>
-
-        <div class="form__row">
-            <label class="form__label" for="date">Дата выполнения</label>
-
-            <input class="form__input form__input--date" type="date" name="date" id="date" value="" placeholder="Введите дату в формате ДД.ММ.ГГГГ">
-        </div>
-
-        <div class="form__row">
-            <label class="form__label" for="preview">Файл</label>
-
-            <div class="form__input-file">
-                <input class="visually-hidden" type="file" name="preview" id="preview" value="">
-
-                <label class="button button--transparent" for="preview">
-                    <span>Выберите файл</span>
-                </label>
-            </div>
-        </div>
-
-        <div class="form__row form__row--controls">
-            <input class="button" type="submit" name="" value="Добавить">
-        </div>
-    </form>
-</div>
+<?=$form_addtask?> <!-- Форма добавления задачи -->
 
 <div class="modal" hidden>
     <button class="modal__close" type="button" name="button">Закрыть</button>
