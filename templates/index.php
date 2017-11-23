@@ -1,14 +1,10 @@
 <?php
-
 // Используемые переменные:
 // 
 // $tasks_array             список всех задач
 // 
 // $show_complete_tasks     Показывать или нет выполненные задачи
 //
-
-
-
 ?>
 
 <h2 class="content__main-heading">Список задач</h2>
@@ -39,10 +35,7 @@
 <table class="tasks">
     <?php foreach($tasks_array as $task) : ?>
     <?php if($show_complete_tasks == 1 || $task['done'] == 0) : ?>
-    <tr class="tasks__item task
-                                <?php if($task['done'] == 1) : ?>task--completed<? endif; ?>
-                                
-                                ">
+    <tr class="tasks__item task <?php if($task['done'] == 1) : ?>task--completed<?php endif; ?>">
         
         <td class="task__select">
             <label class="checkbox task__checkbox">
@@ -52,9 +45,9 @@
         </td>
 
         <td class="task__file">
-            <?php if ($task['file_path'] != 0 ) : ?>
+            <?php if ($task['file_name']) : ?>
             <a class="download-link" href="<?='/' . htmlspecialchars($task['file_name']);?>"><?=$task['file_name'];?></a>
-            <? endif ?>
+            <?php endif ?>
         </td>
 
         <td class="task__date">
@@ -63,5 +56,5 @@
 
     </tr>
     <?php endif; ?>
-    <? endforeach; ?>
+    <?php endforeach; ?>
 </table>

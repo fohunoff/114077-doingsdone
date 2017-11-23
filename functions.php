@@ -47,10 +47,15 @@ function task_num($array, $category_id) {
 * @return string    $date_deadline      -- Дата формата dd.mm.yyyy
 */
 function check_date($date) {
-    $task_deadline_ts = strtotime($date);
-    $date_deadline =  date('d.m.Y', $task_deadline_ts);
+    $task_deadline = strtotime($date);
+    if(is_int($task_deadline)) {
+        $date_deadline =  date('d.m.Y', $task_deadline);
 
-    return $date_deadline;
+        return $date_deadline;
+    } else {
+        $date_deadline = 1;
+        return $date_deadline;
+    }
 }
 
 /*

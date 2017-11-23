@@ -54,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if (in_array($key, $rules)) {
         $date_deadline = check_date($value);
 
-            if (!$date_deadline) {
+            if ($date_deadline == 1) {
                 $errors[$key] = "Неверный формат";
             } else {
                 $new_task['date_deadline'] = $date_deadline;

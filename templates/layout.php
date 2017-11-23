@@ -59,7 +59,7 @@
                 <nav class="main-navigation">
                     <ul class="main-navigation__list">
                     <?php foreach($categories_array as $id => $category_name) : ?>
-                            <li class="main-navigation__list-item <?php if ($id == $_GET['id']) : ?>main-navigation__list-item--active<? endif; ?>">
+                            <li class="main-navigation__list-item <?php if ($id == $_GET['id']) : ?>main-navigation__list-item--active<?php endif; ?>">
                             <a class="main-navigation__list-item-link" href="<?php print("?id=" . $id); ?>"><?= htmlspecialchars($category_name); ?></a>
                             <span class="main-navigation__list-item-count"><?php print(task_num($tasks_array, $id)); ?></span>
                         </li>

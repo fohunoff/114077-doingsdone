@@ -15,38 +15,38 @@
         <div class="form__row">
             <label class="form__label" for="name">Название <sup>*</sup></label>
 
-            <input class="form__input <?php if ($errors['name']):?>form__input--error<? endif ?>" type="text" name="name" id="name" value="<?=$_POST['name']?>" placeholder="Введите название">
+            <input class="form__input <?php if ($errors['name']):?>form__input--error<?php endif ?>" type="text" name="name" id="name" value="<?=$_POST['name']?>" placeholder="Введите название">
 
             <?php if ($errors['name']):?>
             <p class="form__message"><?=$errors['name']?></p>
-            <? endif ?>
+            <?php endif ?>
         </div>
 
         <div class="form__row">
             <label class="form__label" for="category">Проект <sup>*</sup></label>
 
-            <select class="form__input form__input--select <?php if ($errors['category']):?>form__input--error<? endif ?>" name="category" id="category">
+            <select class="form__input form__input--select <?php if ($errors['category']):?>form__input--error<?php endif ?>" name="category" id="category">
                 <option value=""></option>
-                <? foreach ($categories_array as $category_id => $category_name) : ?>
-                <? if ($category_id != 0) : ?>                
-                <option value="<?=$category_id?>"<? if ($_POST['category'] && $_POST['category'] == $category_id) : ?>selected<? endif ?>><?=$category_name?></option>
-                <? endif ?>
-                <? endforeach ?>
+                <?php foreach ($categories_array as $category_id => $category_name) : ?>
+                <?php if ($category_id != 0) : ?>                
+                <option value="<?=$category_id?>"<?php if ($_POST['category'] && $_POST['category'] == $category_id) : ?>selected<?php endif ?>><?=$category_name?></option>
+                <?php endif ?>
+                <?php endforeach ?>
             </select>
 
             <?php if ($errors['category']):?>
             <p class="form__message"><?='Выберите проект'?></p>
-            <? endif ?>
+            <?php endif ?>
         </div>
 
         <div class="form__row">
             <label class="form__label" for="date_deadline">Дата выполнения</label>
 
-            <input class="form__input form__input--date <?php if ($errors['date_deadline']):?>form__input--error<? endif ?>" type="date" name="date_deadline" id="date_deadline" value="<?=$_POST['date_deadline']?>" placeholder="Введите дату в формате ДД.ММ.ГГГГ">
+            <input class="form__input form__input--date <?php if ($errors['date_deadline']):?>form__input--error<?php endif ?>" type="date" name="date_deadline" id="date_deadline" value="<?=$_POST['date_deadline']?>" placeholder="Введите дату в формате ДД.ММ.ГГГГ">
 
             <?php if ($errors['date_deadline']):?>
             <p class="form__message"><?=$errors['date_deadline']?></p>
-            <? endif ?>
+            <?php endif ?>
         </div>
 
         <div class="form__row">
