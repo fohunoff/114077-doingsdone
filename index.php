@@ -10,7 +10,17 @@ $title = "Дела в порядке";
 $user_name = "Иван";
 
 // показывать или нет выполненные задачи
-$show_complete_tasks = rand(0, 1);
+$show_completed = 1;
+
+if ($_GET['show_completed']) {
+    if ($_COOKIE['show'] == 0) {
+        setcookie('show', $_GET['show_completed']);
+        header('Location: index.php');
+    } elseif ($_COOKIE['show'] == 1) {
+        setcookie('show', $_GET['show_completed'], time()-3600);
+        header('Location: index.php');
+    }
+}
 
 // Вывод задач согласно активному пункту категории
 if (isset($_GET['id'])) {
@@ -94,7 +104,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 // блок вывода задач
 $page_content = include_template('templates/index.php', [
         'tasks_array' => isset($project_task) ? $project_task : $tasks_array,
-        'show_complete_tasks' => $show_complete_tasks,
+        'show_completed' => $show_completed,
     ]);
 
 // Блок вывода всей страницы
