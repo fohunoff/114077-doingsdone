@@ -9,18 +9,11 @@ date_default_timezone_set('Europe/Moscow');
 $title = "Дела в порядке";
 $user_name = "Иван";
 
-// показывать или нет выполненные задачи
-$show_completed = 1;
-
-if ($_GET['show_completed']) {
-    if ($_COOKIE['show'] == 0) {
-        setcookie('show', $_GET['show_completed']);
-        header('Location: index.php');
-    } elseif ($_COOKIE['show'] == 1) {
-        setcookie('show', $_GET['show_completed'], time()-3600);
-        header('Location: index.php');
-    }
-}
+if (isset($_GET['show_completed'])) {
+    setcookie('show', (int)$_GET['show_completed']);
+    header('Location: index.php');
+    die();
+} 
 
 // Вывод задач согласно активному пункту категории
 if (isset($_GET['id'])) {

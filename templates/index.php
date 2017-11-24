@@ -1,9 +1,8 @@
 <?php
 // Используемые переменные:
 // 
-// $tasks_array             список всех задач
+// $tasks_array  -- список всех задач
 // 
-// $show_complete_tasks     Показывать или нет выполненные задачи
 //
 ?>
 
@@ -24,11 +23,17 @@
     </nav>
 
     <label class="checkbox">
-        <a href="/?show_completed=<?=$show_completed?>">
-            <!--добавить сюда аттрибут "checked", если переменная $show_complete_tasks равна единице-->
-            <input class="checkbox__input visually-hidden" type="checkbox" <?php if ($_COOKIE['show']) : ?>checked<?php endif; ?>>
+        <?php if((int)$_COOKIE['show'] === 1) : ?>
+            <a href="/?show_completed=0>">
+            <input class="checkbox__input visually-hidden" type="checkbox" checked>
             <span class="checkbox__text">Показывать выполненные</span>
-        </a>
+            </a>
+        <?php else: ?>
+            <a href="/?show_completed=1>">
+            <input class="checkbox__input visually-hidden" type="checkbox">
+            <span class="checkbox__text">Показывать выполненные</span>
+            </a>
+        <?php endif ?>
     </label>
 </div>
 
