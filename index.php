@@ -9,8 +9,11 @@ date_default_timezone_set('Europe/Moscow');
 $title = "Дела в порядке";
 $user_name = "Иван";
 
-// показывать или нет выполненные задачи
-$show_complete_tasks = rand(0, 1);
+if (isset($_GET['show_completed'])) {
+    setcookie('show', (int)$_GET['show_completed']);
+    header('Location: index.php');
+    die();
+} 
 
 // Вывод задач согласно активному пункту категории
 if (isset($_GET['id'])) {
@@ -94,7 +97,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 // блок вывода задач
 $page_content = include_template('templates/index.php', [
         'tasks_array' => isset($project_task) ? $project_task : $tasks_array,
-        'show_complete_tasks' => $show_complete_tasks,
+        'show_completed' => $show_completed,
     ]);
 
 // Блок вывода всей страницы
