@@ -18,6 +18,19 @@ function include_template($path, $options_array) {
     return $template_view;
 }
 
+
+function searchUserByEmail($email, $users)
+{
+$result = null;
+foreach ($users as $user) {
+    if ($user['email'] == $email) { // Если email совпадает, то передаётся весь массив пользователя
+        $result = $user; 
+        break;
+    }
+}
+return $result;
+}
+
 /**
 * Подключает файлы шаблонов
 * 
