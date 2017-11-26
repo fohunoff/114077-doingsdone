@@ -1,13 +1,86 @@
 <?php
+session_start();
 
 require_once 'data.php';
 require_once 'functions.php';
 
+// Заголовок сайта
+$title = "Дела в порядке";
+
 // устанавливаем часовой пояс в Московское время
 date_default_timezone_set('Europe/Moscow');
 
-$title = "Дела в порядке";
-$user_name = "Иван";
+$body_class = "";
+
+// Проверка на авторизацию пользователя
+if (!$_SESSION['user']) {
+
+    // Проверка параметра login и показ формы входа
+    if (isset($_GET['login'])) {
+        $body_class = "overlay";
+        $form_login = include_template('templates/form_login.php', [
+
+        ]);
+    }
+
+    // Проверка данных, которые передал пользователь для аутентификации
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        require_once 'userdata.php'; // Подключаемся к "базе данных" пользователей
+
+        $check_user = $_POST;
+    
+        $required = ['email', 'password'];
+        $errors = [];
+    
+        foreach ($check_user as $key => $value) {
+            
+            // Если строки пустые
+            if (in_array($key, $required) && $value == '') {
+                $errors[$key] = "Заполните это поле";
+            } else {
+                // Если строки нуждаются в проверке
+                if ($user = searchUserByEmail($check_user['email'], $users)) {
+                    $pass_check = password_verify($check_user['password'], $user['password']);
+                    if ($pass_check) {   
+                            $_SESSION['user'] = $user;
+                            break;
+                        } else {    
+                            $errors['password'] = "Неверный пароль";
+                            break;
+                        }
+
+                } else {
+                    $errors['email'] = "Такой пользователь не найден";
+                }
+            }
+        }
+        
+
+        // Если ошибок во время проверки не было выявлено, то записываем пользователя в сессию и открываем доступ к сайту
+        if (!count($errors)) {
+            header('Location: index.php');
+            die();
+    
+        // Если возникли ошибки снова выводим форму входа, но уже с массивом ошибок    
+        } else {
+            $body_class = "overlay";
+            $form_login = include_template('templates/form_login.php', [
+                'errors' => $errors,
+            ]);
+        }
+    }
+
+    $guest_page = include_template('templates/guest.php', [
+        'title' => $title,
+        'body_class' => $body_class,
+        'form_login' => $form_login
+    ]);
+
+    print($guest_page);
+    die();  
+}
+
+/* Вывод шаблонов и данных для авторизованного пользователя */
 
 if (isset($_GET['show_completed'])) {
     setcookie('show', (int)$_GET['show_completed']);
@@ -32,10 +105,9 @@ if (isset($_GET['id'])) {
 };
 
 // Подключение и показ формы
-$body_class = "";
 if (isset($_GET['add'])) {
     $body_class = "class='overlay'";
-    $form_addtask = include_template('templates/form.php', [
+    $form_addtask = include_template('templates/form_addtask.php', [
         'categories_array' => $categories_array,
     ]);
 }
@@ -85,14 +157,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Если возникли ошибки снова выводим форму, но уже с массивом ошибок    
     } else {
         $body_class = "class='overlay'";
-        $form_addtask = include_template('templates/form.php', [
+        $form_addtask = include_template('templates/form_addtask.php', [
             'errors' => $errors,
             'categories_array' => $categories_array,
         ]);
     }
 }
 
-/* Подключение шаблонов */
+/* Подключение шаблонов для авторизованного пользователя*/
 
 // блок вывода задач
 $page_content = include_template('templates/index.php', [
@@ -105,7 +177,7 @@ $layout_content = include_template('templates/layout.php',
     [
         'title' => $title,
         'body_class' => $body_class,
-        'user_name' => $user_name,
+        'user_name' => $_SESSION['user']['name'],
         'categories_array' => $categories_array,
         'tasks_array' => $tasks_array,
         'page_content' => $page_content,
