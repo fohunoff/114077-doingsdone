@@ -31,6 +31,7 @@ CREATE TABLE tasks (
     id                  int AUTO_INCREMENT PRIMARY KEY,
     name                varchar(32) NOT NULL,
     date                date,
+    user_id             int(10) NOT NULL,
     project_id          int(10) NOT NULL,
     is_done             tinyint(1),
     file_path           varchar(128)
