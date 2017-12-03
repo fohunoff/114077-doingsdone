@@ -3,6 +3,8 @@ session_start();
 
 require_once 'data.php';
 require_once 'functions.php';
+require_once 'mysql_helper.php';
+require_once 'init.php';
 
 // Заголовок сайта
 $title = "Дела в порядке";
