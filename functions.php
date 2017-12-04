@@ -7,6 +7,7 @@
 * @param array      $options_array  -- массив с переменными, которые используются в шаблоне
 * 
 * @return string    $template_view  -- строка обработанного кода
+*
 */
 function include_template($path, $options_array) {
     if (file_exists($path)) {
@@ -18,7 +19,16 @@ function include_template($path, $options_array) {
     return $template_view;
 }
 
-
+/**
+ * 
+ * Проверяет присутствие email пользователя
+ * 
+ * @param string     $email     -- почта, которую ввёл пользователь
+ * @param array      $users     -- массив электронных почт зарегистрированных пользователей
+ * 
+ * @return string
+ * 
+ */
 function searchUserByEmail($email, $users)
 {
 $result = null;
@@ -38,6 +48,7 @@ return $result;
 * @param string     $category_id    -- индекс категории проекта
 * 
 * @return int       $task_num       -- количество задач в категории
+*
 */
 function task_num($array, $category_id) {
     $task_num = 0;
@@ -58,6 +69,7 @@ function task_num($array, $category_id) {
 * @param string     $date               -- Дата, полученная из пользовательской формы
 * 
 * @return string    $date_deadline      -- Дата формата dd.mm.yyyy
+*
 */
 function check_date($date) {
     $task_deadline = strtotime($date);
