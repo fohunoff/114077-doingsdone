@@ -1,6 +1,6 @@
 <?php
 
-$link = mysqli_connect("localhost", "root", "", "doinsdone");
+$link = mysqli_connect("localhost", "root", "", "doingsdone");
 
 if ($link == false) {
     $error_text = mysqli_connect_error();

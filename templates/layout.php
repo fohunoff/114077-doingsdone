@@ -58,16 +58,23 @@
 
                 <nav class="main-navigation">
                     <ul class="main-navigation__list">
-                    <?php foreach($categories_array as $id => $category_name) : ?>
-                            <li class="main-navigation__list-item <?php if ($id == $_GET['id']) : ?>main-navigation__list-item--active<?php endif; ?>">
-                            <a class="main-navigation__list-item-link" href="<?php print("?id=" . $id); ?>"><?= htmlspecialchars($category_name); ?></a>
-                            <span class="main-navigation__list-item-count"><?php print(task_num($tasks_array, $id)); ?></span>
+                        <!-- Категория ВСЕ и общее количество задач -->
+                        <li class="main-navigation__list-item <?php if($_GET['id'] == 0) : ?>main-navigation__list-item--active<?php endif; ?>">
+                            <a class="main-navigation__list-item-link" href="<?php print("?id=0"); ?>">Все</a>
+                            <span class="main-navigation__list-item-count"><?php print(task_num($tasks_array, $category['id'])); ?></span>
+                        </li>
+
+                        <!-- Цикл вывода каждой категории и количества задач в ней -->
+                        <?php foreach($categories_array as $category) : ?>
+                        <li class="main-navigation__list-item <?php if ($category['id'] == $_GET['id']) : ?>main-navigation__list-item--active<?php endif; ?>">
+                            <a class="main-navigation__list-item-link" href="<?php print("?id=" . $category['id']); ?>"><?= htmlspecialchars($category['name']); ?></a>
+                            <span class="main-navigation__list-item-count"><?php print(task_num($tasks_array, $category['id'])); ?></span>
                         </li>
                     <?php endforeach; ?>
                     </ul>
                 </nav>
 
-                <a class="button button--transparent button--plus content__side-button" href="#">Добавить проект</a>
+                <a class="button button--transparent button--plus content__side-button" href="<?php print('?add=project'); ?>">Добавить проект</a>
             </section>
 
             <main class="content__main">
@@ -86,6 +93,9 @@
         </div>
 
         <a class="main-footer__button button button--plus" href="<?php print('?add=task'); ?>">Добавить задачу</a>
+
+        <?=$form_addtask?> <!-- Форма добавления задачи -->
+        <?=$form_addproject?> <!-- Форма добавления проекта -->
 
         <div class="main-footer__social social">
             <span class="visually-hidden">Мы в соцсетях:</span>
@@ -116,24 +126,7 @@
     </div>
 </footer>
 
-<?=$form_addtask?> <!-- Форма добавления задачи -->
 
-<div class="modal" hidden>
-    <button class="modal__close" type="button" name="button">Закрыть</button>
 
-    <h2 class="modal__heading">Добавление проекта</h2>
-
-    <form class="form"  action="index.html" method="post">
-        <div class="form__row">
-            <label class="form__label" for="project_name">Название <sup>*</sup></label>
-
-            <input class="form__input" type="text" name="name" id="project_name" value="" placeholder="Введите название проекта">
-        </div>
-
-        <div class="form__row form__row--controls">
-            <input class="button" type="submit" name="" value="Добавить">
-        </div>
-    </form>
-</div>
 </body>
 </html>

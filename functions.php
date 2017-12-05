@@ -53,9 +53,9 @@ return $result;
 function task_num($array, $category_id) {
     $task_num = 0;
     foreach ($array as $task) {
-        if ($category_id == "0") {
+        if (!$category_id) {
             $task_num++;
-        } elseif ($category_id == $task['category']) {
+        } elseif ($category_id == $task['project_id']) {
             $task_num++;
         }
     }
@@ -78,7 +78,7 @@ function check_date($date) {
 
         return $date_deadline;
     } else {
-        $date_deadline = 1;
+        $date_deadline = NULL;
         return $date_deadline;
     }
 }

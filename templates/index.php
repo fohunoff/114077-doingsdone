@@ -39,24 +39,24 @@
 
 <table class="tasks">
     <?php foreach($tasks_array as $task) : ?>
-    <?php if($_COOKIE['show'] || $task['done'] == 0) : ?>
-    <tr class="tasks__item task <?php if($task['done'] == 1) : ?>task--completed<?php endif; ?>">
+    <?php if($_COOKIE['show'] || $task['is_done'] == 0) : ?>
+    <tr class="tasks__item task <?php if($task['is_done'] == 1) : ?>task--completed<?php endif; ?>">
         
         <td class="task__select">
             <label class="checkbox task__checkbox">
                 <input class="checkbox__input visually-hidden" type="checkbox">
-                <a href="/"><span class="checkbox__text"><?= htmlspecialchars($task['name']); ?></span></a>
+                <a href="/?done=<?= htmlspecialchars($task['id']); ?>"><span class="checkbox__text"><?= htmlspecialchars($task['name']); ?></span></a>
             </label>
         </td>
 
         <td class="task__file">
             <?php if ($task['file_name']) : ?>
-            <a class="download-link" href="<?='/' . htmlspecialchars($task['file_name']);?>"><?=$task['file_name'];?></a>
+            <a class="download-link" href="<?='/' . htmlspecialchars($task['file_path']);?>"><?=$task['file_name'];?></a>
             <?php endif ?>
         </td>
 
         <td class="task__date">
-            <?= htmlspecialchars($task['date_deadline']); ?>
+            <?= check_date(htmlspecialchars($task['date'])); ?>
         </td>
 
     </tr>
