@@ -173,7 +173,7 @@ if (!$_SESSION['user']) {
 
 /* Вывод шаблонов и данных для авторизованного пользователя */
 
-// Вывод задач согласно активному пункту категории
+// Вывод задач согласно активному пункту категории проектов
 $tasks_array = '';
 $sql = "SELECT * FROM tasks WHERE user_id =" . $_SESSION['user']['id'];
 $result = mysqli_query($link, $sql);
@@ -196,21 +196,61 @@ if (isset($_GET['id'])) {
     };
 };
 
+// Вывод задач по временной метке
+if(isset($_GET['sort'])) {
+    if($_GET['sort'] == 'today') {
+        $sql = "SELECT * FROM tasks WHERE user_id =" . $_SESSION['user']['id'] . " AND date = CURDATE()";
+        $result = mysqli_query($link, $sql);
+        if ($result) {
+            $tasks_array = mysqli_fetch_all($result,  MYSQLI_ASSOC);
+        }
+    }
+    if($_GET['sort'] == 'tomorrow') {
+        $sql = "SELECT * FROM tasks WHERE user_id =" . $_SESSION['user']['id'] . " AND date = DATE_ADD(CURDATE(), INTERVAL 1 DAY)";
+        $result = mysqli_query($link, $sql);
+        if ($result) {
+            $tasks_array = mysqli_fetch_all($result,  MYSQLI_ASSOC);
+        }
+    }
+    if($_GET['sort'] == 'overdue') {
+        $sql = "SELECT * FROM tasks WHERE user_id =" . $_SESSION['user']['id'] . " AND is_done = 0 AND date < CURDATE()";
+        $result = mysqli_query($link, $sql);
+        if ($result) {
+            $tasks_array = mysqli_fetch_all($result,  MYSQLI_ASSOC);
+        }
+    }
+}
+
+// переключатель задач "выполненно/не выполнено"
 if (isset($_GET['show_completed'])) {
     setcookie('show', (int)$_GET['show_completed']);
     header('Location: index.php');
     exit;
 } 
 
-// Отмечать задачу как выолненную
+// Отмечать задачу как "выполненно/не выполнено"
 if(isset($_GET['done'])) {
-    $sql = "UPDATE tasks SET is_done = 1 WHERE user_id = " . $_SESSION['user']['id'];
-    $result = mysqli_query($link, $sql);
+    $sql_select = "SELECT is_done FROM tasks WHERE id = " . $_GET['done'];
+    $result_select = mysqli_query($link, $sql_select);
+    $row = mysqli_fetch_assoc($result_select);
+    $is_done = $row['is_done'];
 
-    header('Location: index.php');
-    exit;
+    if((int)$is_done === 1) {
+        $sql = "UPDATE tasks SET is_done = 0 WHERE id = " . $_GET['done'];
+        $result = mysqli_query($link, $sql);
+        header('Location: index.php');
+        exit;
+    }
+    
+    if((int)$is_done === 0) {
+        $sql = "UPDATE tasks SET is_done = 1 WHERE id = " . $_GET['done'];
+        $result = mysqli_query($link, $sql);
+        header('Location: index.php');
+        exit;
+    }
 }
- 
+
+// Список всех задач для текущего пользователя
 $categories_array = '';
 $sql = "SELECT * FROM projects WHERE user_id = {$_SESSION['user']['id']};";
 $result = mysqli_query($link, $sql);
@@ -241,8 +281,7 @@ if (isset($_GET['add'])) {
 // Если форма на добавление задачи была отправлена, делаем проверку
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['task'])) {
     $new_task = $_POST;
-    $new_task['project_id'] = 1;
-    $required = ['name', 'category'];
+    $required = ['name', 'project_id'];
     $rules = ['date_deadline'];
     $errors = [];
 
@@ -330,6 +369,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['project'])) {
         ]);
     }
 }
+
+// Проверка метки времени
+
+
 
 /* Подключение шаблонов для авторизованного пользователя*/
 

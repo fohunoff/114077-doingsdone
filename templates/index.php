@@ -16,10 +16,10 @@
 
 <div class="tasks-controls">
     <nav class="tasks-switch">
-        <a href="/" class="tasks-switch__item tasks-switch__item--active">Все задачи</a>
-        <a href="/" class="tasks-switch__item">Повестка дня</a>
-        <a href="/" class="tasks-switch__item">Завтра</a>
-        <a href="/" class="tasks-switch__item">Просроченные</a>
+<a href="/?sort=all" class="tasks-switch__item <?php if($_GET['sort'] == 'all' || !$_GET['sort']):?>tasks-switch__item--active<?php endif;?>">Все задачи</a>
+        <a href="/?sort=today" class="tasks-switch__item <?php if($_GET['sort'] == 'today'):?>tasks-switch__item--active<?php endif;?>">Повестка дня</a>
+        <a href="/?sort=tomorrow" class="tasks-switch__item <?php if($_GET['sort'] == 'tomorrow'):?>tasks-switch__item--active<?php endif;?>">Завтра</a>
+        <a href="/?sort=overdue" class="tasks-switch__item <?php if($_GET['sort'] == 'overdue'):?>tasks-switch__item--active<?php endif;?>">Просроченные</a>
     </nav>
 
     <label class="checkbox">
