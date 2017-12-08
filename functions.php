@@ -83,16 +83,4 @@ function check_date($date) {
     }
 }
 
-/*
-function check_deadline($date) {
-    $days = rand(-3, 3);
-
-    $task_deadline_ts = strtotime("+" . $days . $date); // метка времени даты выполнения задачи
-    $current_ts = strtotime($date); // текущая метка времени
-    
-    // в эту переменную запишите кол-во дней до даты задачи
-    $days_until_deadline =  floor(($task_deadline_ts - $current_ts)/86400);
-    return $days_until_deadline;
-} 
-*/
 ?>
