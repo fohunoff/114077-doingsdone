@@ -241,18 +241,6 @@ if(isset($_GET['sort'])) {
     }
 }
 
-// Отправка эл.почты за час до наступления задачи
-/*
-$sql = "SELECT * FROM tasks WHERE is_done = 0 AND date = DATE_ADD(CURDATE(), INTERVAL 1 DAY)";
-$result = mysqli_query($link, $sql);
-if ($result) {
-    $send_array = mysqli_fetch_all($result,  MYSQLI_ASSOC);
-}
-foreach ($send_array as $value) {
-
-}
-*/
-
 // переключатель задач "выполненно/не выполнено"
 if (isset($_GET['show_completed'])) {
     setcookie('show', (int)$_GET['show_completed']);

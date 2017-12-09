@@ -1,5 +1,7 @@
 <?php
 
+require_once 'vendor/autoload.php';
+
 $link = mysqli_connect("localhost", "root", "", "doingsdone");
 
 if ($link == false) {
