@@ -38,3 +38,5 @@ CREATE TABLE tasks (
 );
 
 CREATE INDEX task_deadline ON tasks(date);
+
+CREATE FULLTEXT INDEX tasks_search ON tasks (name);

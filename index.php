@@ -15,6 +15,7 @@ date_default_timezone_set('Europe/Moscow');
 $body_class = NULL;
 $guest_page = NULL;
 $form_login = NULL;
+$empty_search = NULL;
 $tasks_array = NULL;
 $project_task = NULL;
 $categories_array = NULL;
@@ -288,6 +289,19 @@ $result = mysqli_query($link, $sql);
         $categories_array = mysqli_fetch_all($result,  MYSQLI_ASSOC);
     }
 
+// Полнотекстовый поиск
+if(isset($_GET['search']) && isset($_POST['search_task'])) {
+    $search_query = trim($_POST['search_task']);
+    $sql = "SELECT * FROM tasks WHERE MATCH(name) AGAINST('{$search_query}')";
+    $result = mysqli_query($link, $sql);
+
+    if(mysqli_num_rows($result) != 0) {
+        $project_task = mysqli_fetch_all($result,  MYSQLI_ASSOC);
+    } else {
+        $empty_search = "Ничего не нашли";
+    }
+}
+
 // Подключение и показ формы для добавления новой задачи или категории
 if (isset($_GET['add'])) {
 
@@ -405,6 +419,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['project'])) {
 $page_content = include_template('templates/index.php', [
         'tasks_array' => isset($project_task) ? $project_task : $tasks_array,
         'show_completed' => $show_completed,
+        'empty_search' => $empty_search,
     ]);
 
 // Блок вывода всей страницы
