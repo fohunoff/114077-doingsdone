@@ -11,7 +11,17 @@ $title = "Дела в порядке";
 // устанавливаем часовой пояс в Московское время
 date_default_timezone_set('Europe/Moscow');
 
-$body_class = "";
+// Инициализация переменных
+$body_class = NULL;
+$guest_page = NULL;
+$form_login = NULL;
+$tasks_array = NULL;
+$project_task = NULL;
+$categories_array = NULL;
+$form_addtask = NULL;
+$form_addproject = NULL;
+$page_content = NULL;
+$layout_content = NULL;
 
 // Запрос к базе данных, чтобы получить массив пользователей
 $sql = "SELECT * FROM users";
@@ -51,23 +61,32 @@ if (!$_SESSION['user']) {
         $password_hash = password_hash($password, PASSWORD_DEFAULT);  
     
         $required = ['email', 'password', 'name'];
+        $rules = ['email'];
         $errors = [];
     
         foreach ($check_user as $key => $value) {
-            
             // Если строки пустые
             if (in_array($key, $required) && $value == '') {
                 $errors[$key] = "Заполните это поле";
             } else {
                 // Если строки нуждаются в проверке
-                if ($user = searchUserByEmail($email, $users)) {
+                if (searchUserByEmail($email, $users)) {
                     $errors['email'] = "Такой пользователь уже зарегистрирован";
                 }
+
+                // Проверять на валидность email
+                if (in_array($key, $rules)) {
+                    if(filter_var($value, FILTER_VALIDATE_EMAIL)) {
+                        $email = $value;
+                    } else {
+                        $errors[$key] = "Неверный формат эл.почты";
+                    }
+                }
             }
-        }        
+        } 
 
         // Если ошибок во время проверки не было выявлено, то добавляем пользователя в базу данных
-        if (!count($errors)) {        
+        if (!count($errors)) { 
             $sql_insert = "INSERT INTO users (email, password, name) VALUES (?, ?, ?)";
             $stmt = mysqli_prepare($link, $sql_insert);
             mysqli_stmt_bind_param($stmt, 'sss', $email, $password_hash, $name);
@@ -77,7 +96,7 @@ if (!$_SESSION['user']) {
                 $sql = "SELECT * FROM users WHERE id = " . $user_id;
                 $row = mysqli_query($link, $sql);
                 $user = mysqli_fetch_assoc($row);
-                $_SESSION['user'] = $user;
+                //$_SESSION['user'] = $user;
             } else {
                 $error_page = include_template('templates/db_error.php', [
                     'error_text' => $error_text,   
@@ -85,16 +104,16 @@ if (!$_SESSION['user']) {
                 print($error_page);
                 exit;
             }
-
+            
             // Создаём категорию по умолчанию -- Входящие
             $project_null = 'Входящие';
             $sql_insert = "INSERT INTO projects (name, user_id) VALUES (?, ?)";
             $stmt = mysqli_prepare($link, $sql_insert);
-            mysqli_stmt_bind_param($stmt, 'ss', $project_null, $_SESSION['user']['id']);
+            mysqli_stmt_bind_param($stmt, 'ss', $project_null, $user['id']);
             $res = mysqli_stmt_execute($stmt);
 
             // Обновление страницы
-            header('Location: index.php');
+            header('Location: index.php?login=1');
             exit;
     
         // Если возникли ошибки снова выводим страницу регистрации, но уже с массивом ошибок    
@@ -173,14 +192,14 @@ if (!$_SESSION['user']) {
 
 /* Вывод шаблонов и данных для авторизованного пользователя */
 
-// Вывод задач согласно активному пункту категории проектов
-$tasks_array = '';
+// Вывод всех задач
 $sql = "SELECT * FROM tasks WHERE user_id =" . $_SESSION['user']['id'];
 $result = mysqli_query($link, $sql);
     if ($result) {
         $tasks_array = mysqli_fetch_all($result,  MYSQLI_ASSOC);
     }
 
+// Вывод задач согласно активному пункту категории проектов
 if (isset($_GET['id'])) {
     $project = $_GET['id'];
     if ($project == '0') {
@@ -221,6 +240,18 @@ if(isset($_GET['sort'])) {
     }
 }
 
+// Отправка эл.почты за час до наступления задачи
+/*
+$sql = "SELECT * FROM tasks WHERE is_done = 0 AND date = DATE_ADD(CURDATE(), INTERVAL 1 DAY)";
+$result = mysqli_query($link, $sql);
+if ($result) {
+    $send_array = mysqli_fetch_all($result,  MYSQLI_ASSOC);
+}
+foreach ($send_array as $value) {
+
+}
+*/
+
 // переключатель задач "выполненно/не выполнено"
 if (isset($_GET['show_completed'])) {
     setcookie('show', (int)$_GET['show_completed']);
@@ -250,8 +281,7 @@ if(isset($_GET['done'])) {
     }
 }
 
-// Список всех задач для текущего пользователя
-$categories_array = '';
+// Список всех категорий (проектов) для текущего пользователя
 $sql = "SELECT * FROM projects WHERE user_id = {$_SESSION['user']['id']};";
 $result = mysqli_query($link, $sql);
     if ($result) {
@@ -259,11 +289,7 @@ $result = mysqli_query($link, $sql);
     }
 
 // Подключение и показ формы для добавления новой задачи или категории
-$form_addtask = NULL;
-$form_addproject = NULL;
 if (isset($_GET['add'])) {
-
-    print_r($_GET);
 
     $body_class = "class='overlay'";
 
@@ -313,7 +339,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['task'])) {
         $new_task['file_name'] = $_FILES['task_file']['name']; // Имя файла
     }
 
-    // Если ошибок во время проверки не было выявлено, то добавляем новую задачу в начало массива задач
+    // Если ошибок во время проверки не было выявлено, то добавляем новую задачу в базу данных
     if (!count($errors)) {
         $new_task['is_done'] = false; // Чтобы задача не помечалась как выполненная
         $sql_insert = "INSERT INTO tasks (name, date, user_id, project_id, is_done, file_name, file_path) VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -329,6 +355,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['task'])) {
         );
         $res = mysqli_stmt_execute($stmt);
         header('Location: index.php');
+        exit;
 
     // Если возникли ошибки снова выводим форму, но уже с массивом ошибок    
     } else {
@@ -348,7 +375,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['project'])) {
     $errors = [];
 
     foreach ($new_project as $key => $value) {
-
         if (in_array($key, $required) && $value == '') {
             $errors[$key] = "Заполните это поле";
         } 
@@ -371,7 +397,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['project'])) {
 }
 
 // Проверка метки времени
-
 
 
 /* Подключение шаблонов для авторизованного пользователя*/
