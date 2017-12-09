@@ -1,11 +1,3 @@
-<?php
-// Используемые переменные:
-// 
-// $tasks_array  -- список всех задач
-// $empty_search -- не нашлось или пустой поиск
-//
-?>
-
 <h2 class="content__main-heading">Список задач</h2>
 
 <form class="search-form" action="index.php?search=1" method="post">

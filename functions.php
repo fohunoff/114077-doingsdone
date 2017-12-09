@@ -19,6 +19,8 @@ function include_template($path, $options_array) {
     return $template_view;
 }
 
+
+
 /**
  * 
  * Проверяет присутствие email пользователя
@@ -41,6 +43,8 @@ foreach ($users as $user) {
 return $result;
 }
 
+
+
 /**
 * Выводит список задач согласно активной категории
 * 
@@ -59,9 +63,10 @@ function task_num($array, $category_id) {
             $task_num++;
         }
     }
-
     return $task_num;
 }
+
+
 
 /**
 * Переводит полученную дату в формат dd.mm.yyyy
@@ -75,12 +80,10 @@ function check_date($date) {
     $task_deadline = strtotime($date);
     if(is_int($task_deadline)) {
         $date_deadline =  date('d.m.Y', $task_deadline);
-
-        return $date_deadline;
     } else {
-        $date_deadline = NULL;
-        return $date_deadline;
+        $date_deadline = NULL;     
     }
+    return $date_deadline;
 }
 
 ?>
