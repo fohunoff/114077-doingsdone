@@ -1,0 +1,12 @@
+{
+    "name": "fohunoff/doingsdone",
+    "authors": [
+        {
+            "name": "Ivan Zagainov",
+            "email": "fohunoff@gmail.com"
+        }
+    ],
+    "require": {
+        "swiftmailer/swiftmailer": "^6.0"
+    }
+}
