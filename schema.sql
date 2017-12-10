@@ -29,7 +29,7 @@ CREATE INDEX project_name ON projects(name);
 
 CREATE TABLE tasks (
     id                  int AUTO_INCREMENT PRIMARY KEY,
-    name                varchar(32) NOT NULL,
+    name                varchar(100) NOT NULL,
     date                date,
     user_id             int(10) NOT NULL,
     project_id          int(10) NOT NULL,

@@ -1,12 +1,3 @@
-<?php
-// Используемые переменные:
-// 
-// $categories_array        Список категорий
-// $errors                  Массив с ошибками при неверном заполнении формы
-
-?>
-
-
 <div class="modal">
     <button onclick="window.location.href='index.php'" class="modal__close" type="button" name="button">Закрыть</button>
 

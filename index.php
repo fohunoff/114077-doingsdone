@@ -309,6 +309,7 @@ if (isset($_GET['add'])) {
 // Если форма на добавление задачи была отправлена, делаем проверку
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['task'])) {
     $new_task = $_POST;
+
     $required = ['name', 'project_id'];
     $rules = ['date_deadline'];
     $errors = [];
@@ -343,15 +344,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['task'])) {
 
     // Если ошибок во время проверки не было выявлено, то добавляем новую задачу в базу данных
     if (!count($errors)) {
-        $new_task['is_done'] = false; // Чтобы задача не помечалась как выполненная
-        $sql_insert = "INSERT INTO tasks (name, date, user_id, project_id, is_done, file_name, file_path) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        $sql_insert = "INSERT INTO tasks (name, date, user_id, project_id, file_name, file_path) VALUES (?, ?, ?, ?, ?, ?)";
         $stmt = mysqli_prepare($link, $sql_insert);
-        mysqli_stmt_bind_param($stmt, 'ssiiiss',
+        mysqli_stmt_bind_param($stmt, 'ssiiss',
             $new_task['name'],
             $new_task['date'],
             $_SESSION['user']['id'],
             $new_task['project_id'],
-            $new_task['is_done'],
             $new_task['file_name'],
             $new_task['file_path']            
         );
@@ -397,9 +396,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['project'])) {
         ]);
     }
 }
-
-// Проверка метки времени
-
 
 /* Подключение шаблонов для авторизованного пользователя*/
 

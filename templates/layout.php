@@ -1,20 +1,3 @@
-<?php
-
-// Используемые переменные:
-// 
-// $title                   Заголовок страницы
-// $body_class              Класс с затемнением для вывода формы
-// $user_name               Имя пользователя
-// $categories_array        Список категорий
-// $tasks_array             Список задач
-//
-// $page_content            Содержимое шабона вывода списка задач
-// $form_addtask            Содержимое шаблона формы добавления задачи
-// 
-// $show_complete_tasks     Показывать или нет выполненные задачи
-//
-
-?>
 <!DOCTYPE html>
 <html lang="ru">
 
@@ -94,8 +77,8 @@
 
         <a class="main-footer__button button button--plus" href="<?php print('?add=task'); ?>">Добавить задачу</a>
 
-        <?=$form_addtask?> <!-- Форма добавления задачи -->
-        <?=$form_addproject?> <!-- Форма добавления проекта -->
+        <?=$form_addtask?>
+        <?=$form_addproject?>
 
         <div class="main-footer__social social">
             <span class="visually-hidden">Мы в соцсетях:</span>

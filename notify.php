@@ -18,9 +18,12 @@ if ($result) {
     $users = mysqli_fetch_all($result,  MYSQLI_ASSOC);
 }
 
+// Создаём рассылку для каждого пользователя
 foreach($users as $user) {
+    // Выборка задач по дате
     $sql = "SELECT name, date FROM tasks WHERE user_id = {$user['id']} AND is_done = 0 AND date <= DATE_ADD(CURDATE(), INTERVAL 1 DAY) AND date >= NOW()";
     $result = mysqli_query($link, $sql);
+    // Если совпадения есть, то подготавливаем и отправляем сообщение на почту
     if ((int)mysqli_num_rows($result) !== 0)  {
         $task_array = mysqli_fetch_all($result,  MYSQLI_ASSOC);
         foreach($task_array as $value) {
@@ -37,8 +40,6 @@ foreach($users as $user) {
         ->setSubject($message_topic)
         ->setBody($message_text, 'text/html')
         ;
-
-
 
         // Send the message
         $result = $mailer->send($message);
