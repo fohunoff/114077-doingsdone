@@ -30,11 +30,12 @@ CREATE INDEX project_name ON projects(name);
 CREATE TABLE tasks (
     id                  int AUTO_INCREMENT PRIMARY KEY,
     name                varchar(100) NOT NULL,
-    date                date,
+    date                varchar(50),
     user_id             int(10) NOT NULL,
     project_id          int(10) NOT NULL,
     is_done             bit(1),
-    file_path           varchar(128)
+    file_path           varchar(128),
+    file_name           varchar(128)
 );
 
 CREATE INDEX task_deadline ON tasks(date);
